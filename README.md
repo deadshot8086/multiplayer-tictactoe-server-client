@@ -31,7 +31,11 @@ python3 server.py <PlayerName>
 ![Client](https://github.com/adityabadhiye/multiplayer-tictactoe-server-client/blob/master/images/client.png)
 
 # Demo Video
-https://user-images.githubusercontent.com/76732801/174388174-ff96c155-af17-4b10-81c5-1731e0bbbd8c.mp4
+
+
+
+https://user-images.githubusercontent.com/76732801/174389937-16122633-8d46-4cf3-9a64-9ae50af9059f.mp4
+
 
 
 # Learnings
