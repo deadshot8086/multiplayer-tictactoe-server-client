@@ -26,7 +26,7 @@ def increase_score(player_name):  # using mutex to update common score_board var
 
 
 # this function runs in separate thread, creates game between two socket
-def handle_client(conn1, addr1, conn2, addr2):
+def GameHandler(conn1, addr1, conn2, addr2):
     name1 = recv(conn1)
     name2 = recv(conn2)
     player1 = Player(conn1, addr1, name1, MARK[0])
@@ -61,7 +61,7 @@ def main():
         while len(queue) >= 2:
             (conn1, addr1) = queue.popleft()
             (conn2, addr2) = queue.popleft()
-            thread = threading.Thread(target=handle_client, args=(conn1, addr1, conn2, addr2))
+            thread = threading.Thread(target=GameHandler, args=(conn1, addr1, conn2, addr2))
             thread.start()
 
 
