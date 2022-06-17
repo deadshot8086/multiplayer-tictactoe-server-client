@@ -16,6 +16,9 @@ class GameState:
         self.diag = [0, 0]
         # total number of X, O in board
         self.mark_count = 0
+        self.winner = None
+        self.loser = None
+        self.draw = False
 
     # Function to change turn after successful move
     def flip_turn(self):

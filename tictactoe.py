@@ -30,8 +30,11 @@ class TicTacToe:
                 send(self.player1.conn, (msg[0], msg[1], self.player1.mark))
                 send(self.player2.conn, (msg[0], msg[1], self.player1.mark))
             if ret == State.WIN:  # Winning state
-                self.win(self.player1, self.player2)
+                self.state.winner = self.player1
+                self.state.loser = self.player2
+                self.win()
             if ret == State.DRAW:  # Draw state
+                self.state.draw = True
                 self.draw()
         else:  # If player Y turn
             send(self.player2.conn, State.YOUR_TURN)
@@ -46,13 +49,16 @@ class TicTacToe:
                 send(self.player1.conn, (msg[0], msg[1], self.player2.mark))
                 send(self.player2.conn, (msg[0], msg[1], self.player2.mark))
             if ret == State.WIN:
-                self.win(self.player2, self.player1)
+                self.state.winner = self.player2
+                self.state.loser = self.player1
+                self.win()
             if ret == State.DRAW:
+                self.state.draw = True
                 self.draw()
 
-    def win(self, win, lose):  # Function to send win/lose message
-        send(win.conn, State.WIN)
-        send(lose.conn, State.LOSE)
+    def win(self):  # Function to send win/lose message
+        send(self.state.winner.conn, State.WIN)
+        send(self.state.loser.conn, State.LOSE)
         self.stop()
 
     def draw(self):  # Function to send draw message

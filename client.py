@@ -11,8 +11,8 @@ ADDR = (IP, PORT)
 
 def main():
     name = sys.argv[1]
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(ADDR)
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.connect(ADDR)
     board = [[' ' for x in range(N)] for y in range(N)]
 
     def print_board():
@@ -26,37 +26,37 @@ def main():
                   ═══╬═══╬═══
                3   {board[2][0]} ║ {board[2][1]} ║ {board[2][2]}''')
 
-    send(client, name)
+    send(server, name)
     print(f"[CONNECTED] Client connected to server at {IP}:{PORT}")
     print("[WAITING] waiting for player to join")
-    msg = recv(client)
+    msg = recv(server)
     if msg == State.PLAYER_CONNECTED:
         print(f"[SERVER] Player Connected")
         print_board()
     while True:
-        msg = recv(client)
+        msg = recv(server)
         if msg == State.DISCONNECT:
-            client.close()
+            server.close()
             break
         elif msg == State.YOUR_TURN:
             print("YOUR TURN")
-            send(client, input("> "))
+            send(server, input("> "))
         elif msg == State.NOT_YOUR_TURN:
             print("OPPONENT TURN")
         elif msg == State.WIN:
             print_board()
             print("you win!!")
-            client.close()
+            server.close()
             break
         elif msg == State.LOSE:
             print_board()
             print("you lose!!")
-            client.close()
+            server.close()
             break
         elif msg == State.DRAW:
             print_board()
             print("game draw!!")
-            client.close()
+            server.close()
             break
         else:
             board[msg[0]][msg[1]] = msg[2]

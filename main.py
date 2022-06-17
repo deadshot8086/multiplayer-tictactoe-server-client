@@ -10,6 +10,20 @@ IP = socket.gethostbyname(socket.gethostname())
 PORT = 5566
 ADDR = (IP, PORT)
 
+mutex = threading.Lock()
+score_board = {}
+
+
+def increase_score(player_name):  # using mutex to update common score_board variable
+    mutex.acquire()
+    try:
+        if player_name not in score_board:
+            score_board[player_name] = 0
+        score_board[player_name] += 1
+        print(score_board)
+    finally:
+        mutex.release()
+
 
 # this function runs in separate thread, creates game between two socket
 def handle_client(conn1, addr1, conn2, addr2):
@@ -19,9 +33,13 @@ def handle_client(conn1, addr1, conn2, addr2):
     player2 = Player(conn2, addr2, name2, MARK[1])
     print(f"[GAME STARTED] {name1} vs {name2}")
     print(f"[ACTIVE GAMES] {threading.activeCount() - 1}")
-    TicTacToe(player1, player2)
-    # game = TicTacToe(player1, player2)
-    # del game
+    game = TicTacToe(player1, player2)
+    if game.state.draw:
+        increase_score(game.player1.name)
+        increase_score(game.player2.name)
+    else:
+        increase_score(game.state.winner.name)
+    del game
     print(f"[GAME ENDED] {name1} vs {name2}")
     print(f"[ACTIVE GAMES] {threading.activeCount() - 2}")
 
